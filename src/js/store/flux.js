@@ -64,12 +64,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.setItem("favoritos", JSON.stringify(favCollection));
 			},
 			deleteFav: url => {
-				setStore({
-					favs: getStore().favs.filter(item => {
-						return item.url != url;
-					})
-				});
+				const updatedFavs = getStore().favs.filter(item => item.url !== url);
+				setStore({ favs: updatedFavs });
+				localStorage.setItem("favoritos", JSON.stringify(updatedFavs));
 			}
+
 		}
 	};
 };

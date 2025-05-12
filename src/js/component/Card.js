@@ -6,16 +6,23 @@ import { Context } from "../store/appContext";
 
 const Card = props => {
 	const ROUTE = "/" + props.route + "/" + props.id;
-
 	const { store, actions } = useContext(Context);
 
-	const addFav = () => {
-		const newFav = {
-			url: ROUTE,
-			label: props.title
-		};
+	const favData = {
+		url: ROUTE,
+		label: props.title
+	};
 
-		actions.addFav(newFav);
+	// Verifica si ya está en favoritos
+	const isFavorite = store.favs.some(fav => fav.url === favData.url);
+
+	// Función para alternar favorito
+	const toggleFav = () => {
+		if (isFavorite) {
+			actions.deleteFav(favData.url);
+		} else {
+			actions.addFav(favData);
+		}
 	};
 
 	return (
@@ -29,16 +36,14 @@ const Card = props => {
 				<h5 className="card-title text-dark text-left">{props.title}</h5>
 				<p className="card-text text-secondary text-left">{props.description}</p>
 				<Link to={ROUTE}>
-					<button className="btn btn-outline-primary float-left">Ver mas</button>
+					<button className="btn btn-outline-primary float-left">Ver más</button>
 				</Link>
-				<a
-					href="#"
+				<button
 					className="btn btn-outline-warning float-right"
-					onClick={e => {
-						addFav();
-					}}>
-					&#x2661;
-				</a>
+					onClick={toggleFav}
+				>
+					{isFavorite ? "❤️" : "🤍"}
+				</button>
 			</div>
 		</div>
 	);
